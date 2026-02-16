@@ -1,10 +1,10 @@
-def filter_by_state(data, state="EXECUTED"):
+def filter_by_state(data: list, state: str = "EXECUTED") -> list:
     """Функция возвращает новый список словарей, содержащий только те словари, у которых ключ
-       state соответствует указанному значению.
+    state соответствует указанному значению.
     """
 
     # пустой список для результата
-    result=[]
+    result = []
 
     # проходим по каждому словарю в списке
     for item in data:
@@ -14,18 +14,3 @@ def filter_by_state(data, state="EXECUTED"):
             if item['state'] == state:
                 result.append(item)
     return result
-
-
-
-
-
-
-
-
-
-
-
-
-
-def sort_by_date():
- pass
