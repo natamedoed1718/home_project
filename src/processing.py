@@ -1,3 +1,6 @@
+from typing import Any
+
+
 def filter_by_state(data: list, state: str = "EXECUTED") -> list:
     """Функция возвращает новый список словарей, содержащий только те словари, у которых ключ
     state соответствует указанному значению.
@@ -14,3 +17,12 @@ def filter_by_state(data: list, state: str = "EXECUTED") -> list:
             if item['state'] == state:
                 result.append(item)
     return result
+
+
+def sort_by_date(data: list[dict[str, Any]], reverse: bool = True) -> list[dict[str, Any]]:
+    """Функция, которая принимает список словарей и необязательный параметр,
+    задающий порядок сортировки (по умолчанию — убывание).
+    Функция должна возвращать новый список, отсортированный по дате (date).
+    """
+
+    return sorted(data, key=lambda item: item['date'], reverse=reverse)
