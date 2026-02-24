@@ -11,8 +11,6 @@ def mask_account_card(card_or_account: str) -> str:
         return ""
 
     parts = card_or_account.split()
-    if len(parts) < 2:
-        return ""
 
     number = parts[-1]
     name = " ".join(parts[:-1])
