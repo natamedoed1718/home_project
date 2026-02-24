@@ -2,23 +2,23 @@ import pytest
 
 
 @pytest.fixture
-def card_16():
+def card_value():
     return "1234567812345678"
 
 
 @pytest.fixture
-def account_20():
+def account_value():
     return "12345678901234567890"
 
 
 @pytest.fixture
-def card_input():
+def mask_account_card_value():
     return "Visa Platinum 1234567812345678"
 
 
 @pytest.fixture
-def account_input():
-    return "Счет 12345678901234567890"
+def date_value():
+    return "2024-03-11T02:26:18.671407"
 
 @pytest.fixture
 def operations():
