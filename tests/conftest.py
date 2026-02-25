@@ -1,5 +1,5 @@
 import pytest
-
+from src.processing import sort_by_date
 
 @pytest.fixture
 def card_value():
@@ -20,6 +20,7 @@ def mask_account_card_value():
 def date_value():
     return "2024-03-11T02:26:18.671407"
 
+
 @pytest.fixture
 def operations():
     return [
@@ -28,3 +29,27 @@ def operations():
         {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
         {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
     ]
+
+@pytest.fixture
+def same_dates_data():
+    """Данные с одинаковыми датами"""
+    return [
+        {"date": "2024-01-01"},
+        {"date": "2024-01-01"},
+    ]
+def test_sort_by_date_same_dates(same_dates_data):
+    """Одинаковые даты"""
+    result = sort_by_date(same_dates_data)
+    assert len(result) == 2
+
+@pytest.fixture
+def invalid_date_transactions():
+    """Транзакции с некорректными датами для тестов сортировки."""
+    return [
+        {"date": "Некорректная дата"},
+        {"date": "2024-01-01"},
+    ]
+
+def test_sort_by_date_invalid_format(invalid_date_transactions):
+    result = sort_by_date(invalid_date_transactions)
+    assert len(result) == 2

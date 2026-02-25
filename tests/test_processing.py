@@ -1,5 +1,7 @@
 import pytest
-from src.processing import filter_by_state,sort_by_date
+
+from src.processing import filter_by_state, sort_by_date
+
 
 @pytest.mark.parametrize(
     "state, expected_len",
@@ -13,6 +15,7 @@ def test_filter_by_state(operations, state, expected_len):
     # Вызываем функцию фильтрации
     result = filter_by_state(operations, state)
     assert len(result) == expected_len
+
 
 @pytest.mark.parametrize(
     "reverse, expected_order",
@@ -43,27 +46,7 @@ def test_sort_by_date_full_order(operations, reverse, expected_order):
     # сравниваем без микросекунд
     assert [item["date"][:19] for item in result] == expected_order
 
-# одинаковые даты
-def test_sort_by_date_same_dates():
-    data = [
-        {"date": "2024-01-01"},
-        {"date": "2024-01-01"},
-    ]
 
-    result = sort_by_date(data)
-
-    assert len(result) == 2
-
- # нестандартный формат
-def test_sort_by_date_invalid_format():
-    data = [
-        {"date": "Некорректная дата"},
-        {"date": "2024-01-01"},
-    ]
-
-    result = sort_by_date(data)
-
-    assert len(result) == 2
 
 
 
