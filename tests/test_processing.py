@@ -45,8 +45,3 @@ def test_sort_by_date_full_order(operations, reverse, expected_order):
 
     # сравниваем без микросекунд
     assert [item["date"][:19] for item in result] == expected_order
-
-
-
-
-

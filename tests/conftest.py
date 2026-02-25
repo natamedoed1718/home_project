@@ -1,6 +1,7 @@
 import pytest
 from src.processing import sort_by_date
 
+
 @pytest.fixture
 def card_value():
     return "1234567812345678"
@@ -30,6 +31,7 @@ def operations():
         {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
     ]
 
+
 @pytest.fixture
 def same_dates_data():
     """Данные с одинаковыми датами"""
@@ -37,10 +39,13 @@ def same_dates_data():
         {"date": "2024-01-01"},
         {"date": "2024-01-01"},
     ]
+
+
 def test_sort_by_date_same_dates(same_dates_data):
     """Одинаковые даты"""
     result = sort_by_date(same_dates_data)
     assert len(result) == 2
+
 
 @pytest.fixture
 def invalid_date_transactions():
@@ -49,6 +54,7 @@ def invalid_date_transactions():
         {"date": "Некорректная дата"},
         {"date": "2024-01-01"},
     ]
+
 
 def test_sort_by_date_invalid_format(invalid_date_transactions):
     result = sort_by_date(invalid_date_transactions)
