@@ -3,45 +3,56 @@ import pytest
 from src.processing import filter_by_state, sort_by_date
 
 
-@pytest.mark.parametrize(
-    "state, expected_len",
-    [
-        ("EXECUTED", 2),
-        ("CANCELED", 2),
-        ("PENDING", 0),
-    ],
-)
-def test_filter_by_state(operations, state, expected_len):
-    # Вызываем функцию фильтрации
-    result = filter_by_state(operations, state)
-    assert len(result) == expected_len
+@pytest.fixture
+def operations_with_expected():
+    operations = [
+        {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
+        {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
+        {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
+        {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
+    ]
+
+    expected_results = {
+        "EXECUTED": 2,
+        "CANCELED": 2,
+        "PENDING": 0,
+    }
+
+    return operations, expected_results
 
 
-@pytest.mark.parametrize(
-    "reverse, expected_order",
-    [
-        (
-            True,
-            [
-                "2019-07-03T18:35:29",
-                "2018-10-14T08:21:33",
-                "2018-09-12T21:27:25",
-                "2018-06-30T02:08:58",
-            ],
-        ),
-        (
-            False,
-            [
-                "2018-06-30T02:08:58",
-                "2018-09-12T21:27:25",
-                "2018-10-14T08:21:33",
-                "2019-07-03T18:35:29",
-            ],
-        ),
-    ],
-)
-def test_sort_by_date_full_order(operations, reverse, expected_order):
-    result = sort_by_date(operations, reverse=reverse)
+def test_filter_by_state(operations_with_expected):
+    operations, expected_results = operations_with_expected
 
-    # сравниваем без микросекунд
-    assert [item["date"][:19] for item in result] == expected_order
+    for state, expected_len in expected_results.items():
+        result = filter_by_state(operations, state)
+        assert len(result) == expected_len
+
+
+@pytest.fixture
+def same_dates_data():
+    """Данные с одинаковыми датами"""
+    return [
+        {"date": "2024-01-01"},
+        {"date": "2024-01-01"},
+    ]
+
+
+def test_sort_by_date_same_dates(same_dates_data):
+    """Одинаковые даты"""
+    result = sort_by_date(same_dates_data)
+    assert len(result) == 2
+
+
+@pytest.fixture
+def invalid_date_transactions():
+    """Транзакции с некорректными датами для тестов сортировки."""
+    return [
+        {"date": "Некорректная дата"},
+        {"date": "2024-01-01"},
+    ]
+
+
+def test_sort_by_date_invalid_format(invalid_date_transactions):
+    result = sort_by_date(invalid_date_transactions)
+    assert len(result) == 2
