@@ -14,11 +14,15 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.dependencies]
 python = ">=3.14"
 
-[tool.poetry.dependencies.lint]
+[tool.poetry.group.lint.dependencies]
 flake8 = ">=7.3.0,<8.0.0"
 black = ">=26.1.0,<27.0.0"
 isort = ">=7.0.0,<8.0.0"
 mypy = ">=1.19.1,<2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^7.0.0"
+pytest = "^9.0.2"
 
 
 
@@ -42,3 +46,15 @@ line_length = 119
 disallow_untyped_defs = true
 warn_return_any = true
 exclude='venv'
+
+# Для тестов
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[tool.pytest.ini_options]
+addopts = "--cov=src --cov-report=html --cov-report=term --cov-fail-under=80"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
