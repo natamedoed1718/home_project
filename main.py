@@ -1,6 +1,8 @@
+
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
+from src.generators import filter_by_currency,transaction_descriptions, card_number_generator
 
 # Проверка маскировки карт и счетов
 print(get_mask_card_number("7000792289606361"))
@@ -30,3 +32,43 @@ data = [
 
 print(filter_by_state(data))
 print(sort_by_date(data))
+
+# принимает на вход список словарей, представляющих транзакции
+transactions = [
+    {
+        "operationAmount": {
+            "currency": {"code": "USD"}
+        },
+        "description": "Перевод организации"
+    },
+    {
+        "operationAmount": {
+            "currency": {"code": "USD"}
+        },
+        "description": "Перевод со счета на счет"
+    }
+]
+
+usd_transactions = filter_by_currency(transactions, "USD")
+for _ in range(2):
+    print(next(usd_transactions))
+
+# Генератор, который принимает список словарей
+# с транзакциями и возвращает описание каждой операции по очереди.
+transactions = [
+    {"description": "Перевод организации"},
+    {"description": "Перевод со счета на счет"},
+    {"description": "Перевод со счета на счет"},
+    {"description": "Перевод с карты на карту"},
+    {"description": "Перевод организации"},
+]
+
+descriptions = transaction_descriptions(transactions)
+for _ in range(5):
+    print(next(descriptions))
+
+#Генератор, который выдает номера банковских карт в формате
+#XXXX XXXX XXXX XXXX, где X — цифра номера карты.
+
+for card_number in card_number_generator(1, 5):
+    print(card_number)
