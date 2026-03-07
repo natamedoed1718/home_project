@@ -18,7 +18,7 @@ def get_mask_card_number(card_number: str) -> str:
         print("Номер карты не должен содержать больше 16 цифр.")
         return ""
 
-    return new_card_number[:4] + " " + new_card_number[4:6] + "** ****" + new_card_number[-4:]
+    return new_card_number[:4] + " " + new_card_number[4:6] + "** **** " + new_card_number[-4:]
 
 
 def get_mask_account(account_number: str) -> str:
