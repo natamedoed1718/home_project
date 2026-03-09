@@ -204,7 +204,3 @@ __marimo__/
 
 
 .idea/
-.vscode/
-__pycache__/
-*.pyc
-.env
