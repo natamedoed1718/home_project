@@ -57,4 +57,6 @@ def get_date(date_str: str) -> str:
         return ""
 
     return f"{day}.{month}.{year}"
+
+
 pass
