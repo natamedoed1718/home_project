@@ -1,3 +1,5 @@
+
+from src.decorators import log
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
@@ -105,3 +107,23 @@ for _ in range(5):
 
 for card_number in card_number_generator(1, 5):
     print(card_number)
+
+
+# пример использования декораторов
+@log(filename="mylog.txt")
+def my_function(x: int, y: int) -> int:
+    """Сложение чисел"""
+    return x + y
+
+
+result: int = my_function(1, 2)
+print(result)
+
+
+@log(filename="mylog.txt")  # пример с ошибкой
+def divide(a: float, b: float) -> float:
+    """Деление числа"""
+    return a / b
+
+
+divide(1, 0)
