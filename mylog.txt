@@ -1,0 +1,8 @@
+my_function ok
+divide error: ZeroDivisionError. Inputs: {args}, {kwargs}
+my_function ok
+divide error: ZeroDivisionError. Inputs: {args}, {kwargs}
+my_function ok
+divide error: ZeroDivisionError. Inputs: {args}, {kwargs}
+my_function ok
+divide error: ZeroDivisionError. Inputs: (1, 0), {}
