@@ -1,8 +1,10 @@
 
+from src.external_api import convert_to_rub
 from src.decorators import log
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
+from src.utils import load_transactions
 from src.widget import get_date, mask_account_card
 
 # Проверка маскировки карт и счетов
@@ -34,6 +36,21 @@ data = [
 print(filter_by_state(data))
 print(sort_by_date(data))
 
+
+# Функция, которая принимает на вход путь до JSON-файла
+# и возвращает список словарей с данными о финансовых транзакциях.
+
+transactions = load_transactions("..data/operations.json")
+
+print(transactions)
+
+# Функция, которая принимает на вход транзакцию и возвращает сумму транзакции
+
+transaction = {"operationAmount": {"amount": "10", "currency": {"code": "USD"}}}
+
+result = convert_to_rub(transaction)
+
+print(result)
 
 # принимает на вход список словарей, представляющих транзакции
 transactions = [
@@ -127,3 +144,4 @@ def divide(a: float, b: float) -> float:
 
 
 divide(1, 0)
+
