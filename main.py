@@ -1,8 +1,7 @@
-
-from src.external_api import convert_to_rub
 from src.decorators import log
+from src.external_api import convert_to_rub
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
-from src.masks import get_mask_account, get_mask_card_number
+from src.masks import get_mask_account, get_mask_card_number, mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.utils import load_transactions
 from src.widget import get_date, mask_account_card
@@ -133,7 +132,7 @@ def my_function(x: int, y: int) -> int:
     return x + y
 
 
-result: int = my_function(1, 2)
+result = my_function(1, 2)
 print(result)
 
 
@@ -145,3 +144,7 @@ def divide(a: float, b: float) -> float:
 
 divide(1, 0)
 
+# logging
+
+load_transactions("data/operations.json")
+mask_card_number("1234567812345678")
