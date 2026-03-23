@@ -1,9 +1,4 @@
-"""Реализуйте в этом модуле две функции:
-Функцию маскировки номера банковской карты
-get_mask_card_number
-Функцию маскировки номера банковского счета
-get_mask_account
-"""
+from src.logger_config import setup_logger
 
 
 def get_mask_card_number(card_number: str) -> str:
@@ -33,3 +28,37 @@ def get_mask_account(account_number: str) -> str:
 
     return f"**{account_number[-4:]}"
 
+
+logger = setup_logger("masks", "logs/masks.log")
+
+
+def mask_card_number(card_number: str) -> str:
+    """Маскирует номер карты."""
+
+    logger.info("Начало маскирования карты")
+
+    if len(card_number) < 16:
+        logger.error("Некорректный номер карты")
+        return ""
+
+    masked: str = f"{card_number[:4]} **** **** {card_number[-4:]}"
+    logger.info("Маскирование завершено")
+
+    return masked
+
+
+def get_mask_account_log(account_number: str) -> str:
+    """Функция маскирует номер банковского счета."""
+    new_account_number = account_number.replace(" ", "")
+
+    if not new_account_number.isdigit():
+        logger.error("Неправильный формат номера счета: %s", account_number)
+        return ""
+
+    if len(new_account_number) != 20:
+        logger.error("Номер счета не 20 цифр: %s", account_number)
+        return ""
+
+    masked_account = f"**{account_number[-4:]}"
+    logger.info("Маскирование прошло успешно: %s → %s", account_number, masked_account)
+    return masked_account
