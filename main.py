@@ -1,3 +1,4 @@
+from src.data_loader import load_transactions_from_csv, load_transactions_from_xlsx
 from src.decorators import log
 from src.external_api import convert_to_rub
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
@@ -148,3 +149,12 @@ divide(1, 0)
 
 load_transactions("data/operations.json")
 mask_card_number("1234567812345678")
+
+
+# cvs
+
+csv_data = load_transactions_from_csv("data/transactions.csv")
+print("CSV:", csv_data)
+
+xlsx_data = load_transactions_from_xlsx("data/transactions_excel.xlsx")
+print("XLSX:", xlsx_data)
