@@ -1,8 +1,10 @@
 from typing import Any, Dict, List, cast
+
 import pandas as pd
 
 
 def load_transactions_from_csv(file_path: str) -> List[Dict[str, Any]]:
+    """Функция для считывания финансовых операций из CSV."""
     try:
         df = pd.read_csv(file_path)
 
@@ -27,3 +29,6 @@ def load_transactions_from_xlsx(file_path: str) -> List[Dict[str, Any]]:
 
     except (FileNotFoundError, ValueError):
         return []
+
+
+pass
