@@ -1,6 +1,11 @@
-from src.data_loader import load_transactions_from_csv, load_transactions_from_xlsx
+from typing import Any, Dict, List
+
+from src.data_loader import load_transactions_from_csv
+from src.data_loader import load_transactions_from_csv as load_other
+from src.data_loader import load_transactions_from_xlsx
 from src.decorators import log
 from src.external_api import convert_to_rub
+from src.filters import process_bank_operations, process_bank_search
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number, mask_card_number
 from src.processing import filter_by_state, sort_by_date
@@ -11,7 +16,6 @@ from src.widget import get_date, mask_account_card
 print(get_mask_card_number("7000792289606361"))
 print(get_mask_account("73654108430135874305"))
 
-
 print(mask_account_card("Maestro 1596837868705199"))
 print(mask_account_card("Счет 64686473678894779589"))
 print(mask_account_card("MasterCard 7158300734726758"))
@@ -20,7 +24,6 @@ print(mask_account_card("Visa Classic 6831982476737658"))
 print(mask_account_card("Visa Platinum 8990922113665229"))
 print(mask_account_card("Visa Gold 5999414228426353"))
 print(mask_account_card("Счет 73654108430135874305"))
-
 
 # Проверка даты
 print(get_date("2024-03-11T02:26:18.671407"))
@@ -35,7 +38,6 @@ data = [
 
 print(filter_by_state(data))
 print(sort_by_date(data))
-
 
 # Функция, которая принимает на вход путь до JSON-файла
 # и возвращает список словарей с данными о финансовых транзакциях.
@@ -150,7 +152,6 @@ divide(1, 0)
 load_transactions("data/operations.json")
 mask_card_number("1234567812345678")
 
-
 # cvs
 
 csv_data = load_transactions_from_csv("data/transactions.csv")
@@ -158,3 +159,101 @@ print("CSV:", csv_data)
 
 xlsx_data = load_transactions_from_xlsx("data/transactions_excel.xlsx")
 print("XLSX:", xlsx_data)
+
+
+def main() -> None:
+    print("Привет! Добро пожаловать в программу работы с банковскими транзакциями.")
+
+    print("Выберите пункт:")
+    print("1. JSON")
+    print("2. CSV")
+    print("3. XLSX")
+
+    choice = input("Введите номер: ")
+
+    if choice == "1":
+        print("Для обработки выбран JSON-файл.")
+        data = load_transactions("data/operations.json")
+    elif choice == "2":
+        print("Для обработки выбран CSV-файл.")
+        data = load_other("data/transactions.csv")
+    elif choice == "3":
+        print("Для обработки выбран XLSX-файл.")
+        data = load_other("data/transactions_excel.xlsx")
+    elif choice == "4":
+        print("Подсчет операций по категориям")
+
+        data = load_transactions("data/operations.json")
+
+        categories_input = input("Введите категории через запятую (например: Перевод, Открытие вклада): ")
+
+        categories = [cat.strip() for cat in categories_input.split(",")]
+
+        result = process_bank_operations(data, categories)
+
+        print("\nРезультат:")
+        for category, count in result.items():
+            print(f"{category}: {count}")
+
+    else:
+        print("Неверный выбор")
+        return
+
+    # Фильтр по статусу
+    valid_statuses = {"EXECUTED", "CANCELED", "PENDING"}
+
+    while True:
+        status = input("Введите статус (EXECUTED, CANCELED, PENDING): ").upper()
+
+        if status in valid_statuses:
+            break
+
+        print(f'Статус операции "{status}" недоступен.')
+
+    filtered: List[Dict[str, Any]] = [item for item in data if item.get("state", "").upper() == status]
+
+    print(f'Операции отфильтрованы по статусу "{status}"')
+
+    # Сортировка
+
+    sort_choice = input("Отсортировать по дате? Да/Нет: ").lower()
+
+    if sort_choice == "да":
+        order = input("По возрастанию или по убыванию?: ").lower()
+
+        reverse = order == "по убыванию"
+
+        filtered.sort(key=lambda x: x.get("date", ""), reverse=reverse)
+
+    # Только рубли
+    rub_only = input("Только рубли? Да/Нет: ").lower()
+
+    if rub_only == "да":
+        filtered = [
+            item for item in filtered if item.get("operationAmount", {}).get("currency", {}).get("code") == "RUB"
+        ]
+
+    # Поиск
+
+    search_choice = input("Фильтр по слову в описании? Да/Нет: ").lower()
+
+    if search_choice == "да":
+        word = input("Введите слово: ")
+        filtered = process_bank_search(filtered, word)
+
+    # Вывод
+
+    if not filtered:
+        print("Не найдено ни одной транзакции")
+        return
+
+    print(f"Всего операций: {len(filtered)}\n")
+
+    for item in filtered:
+        print(item.get("date", ""), item.get("description", ""))
+        print("Сумма:", item.get("operationAmount", {}).get("amount"))
+        print()
+
+
+if __name__ == "__main__":
+    main()
