@@ -145,7 +145,7 @@ def divide(a: float, b: float) -> float:
     return a / b
 
 
-divide(1, 0)
+#divide(1, 0)
 
 # logging
 

@@ -8,7 +8,7 @@ load_dotenv()
 
 API_KEY = os.getenv("EXCHANGE_API_KEY")
 
-URL = "https://apilayer.com/exchangerates_data-api"
+URL = "https://api.apilayer.com/exchangerates_data/latest"
 
 
 def convert_to_rub(transaction: Dict[str, Any]) -> float:
